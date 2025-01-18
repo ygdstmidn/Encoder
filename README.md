@@ -1,4 +1,4 @@
-# Encoder Module
+# Encoder
 
 ## 概要
 STM32CubeHALのエンコーダ機能をラップして使いやすくしました．<br>
