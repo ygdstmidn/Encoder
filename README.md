@@ -1,18 +1,18 @@
 # Encoder
 
 ## 概要
-STM32CubeHALのエンコーダ機能をラップして使いやすくしました．<br>
+STM32CubeHALのエンコーダ機能をラップして使いやすくしました．\
 クラス内にint64_t型のカウンタを作り，HALのエンコーダ機能によって前回からの差分を加算していきます．
 
 ## ライセンス
-このプロジェクトはMITライセンスの下で公開されています。詳細は[LICENSE](https://opensource.org/license/mit)ファイルを参照してください。
+このプロジェクトはMITライセンスの下で公開されています。詳細は[LICENSE](./LICENSE)ファイルを参照してください。
 
 ## 使用方法
 ### 初期化
 ```cpp
 Encoder encoder(&htim);
 ```
-TIM_HandleTypeDef型のポインタを引数に取ります．(エンコーダモードになっているタイマー)<br>
+TIM_HandleTypeDef型のポインタを引数に取ります．(エンコーダモードになっているタイマー)\
 encoderという名前は好きに決めてください．
 ### 計測開始
 ```cpp
