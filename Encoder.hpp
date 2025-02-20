@@ -72,6 +72,7 @@ public:
             pos += *((int16_t *)(&raw_speed));
             return *((int16_t *)(&raw_speed));
         }
+        return 0;
     }
 
 private:
