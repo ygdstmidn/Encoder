@@ -10,9 +10,10 @@ STM32CubeHALのエンコーダ機能をラップして使いやすくしまし�
 ## 使用方法
 ### 初期化
 ```cpp
-Encoder encoder(&htim);
+Encoder encoder(&htim,timerBit);
 ```
 TIM_HandleTypeDef型のポインタを引数に取ります．(エンコーダモードになっているタイマー)\
+timerBitはエンコーダのビット数です．32ビットタイマーと16ビットタイマーは実装済みです\
 encoderという名前は好きに決めてください．
 ### 計測開始
 ```cpp
@@ -38,7 +39,10 @@ int64_t pos = encoder.getPos();
 ```cpp
 int32_t speed = encoder.getSpeed();
 ```
-現在の速度を取得します．
+現在の速度を取得します．\
+16ビットタイマーの場合，速度は16ビットになりますが，32ビットに拡張されて返されます．\
+速度と言っても，前回との差分を取っているだけです．\
+定期的にgetSpeedすることをオススメします．
 
 ## 注意点
 getPos,getSpeed関数を呼び出すと，内部でエンコーダのカウンタがリセットされます

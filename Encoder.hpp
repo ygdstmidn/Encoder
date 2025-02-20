@@ -10,7 +10,11 @@ class Encoder
 {
 public:
     /// @param htim エンコーダモードになっているタイマハンドラ
-    Encoder(TIM_HandleTypeDef *htim) : htim_{htim} {}
+    Encoder(TIM_HandleTypeDef *htim, int inputTimerBit)
+    {
+        htim_ = htim;
+        timerBit = inputTimerBit;
+    }
     ~Encoder()
     {
         stop();
@@ -35,9 +39,18 @@ public:
     /// @note この関数を呼び出すと，内部でエンコーダのカウンタがリセットされる
     int64_t getPos(void)
     {
-        const uint32_t raw_speed = htim_->Instance->CNT;
-        htim_->Instance->CNT = 0;
-        pos += *((int32_t *)(&raw_speed));
+        if (timerBit == 32)
+        {
+            const uint32_t raw_speed = htim_->Instance->CNT;
+            htim_->Instance->CNT = 0;
+            pos += *((int32_t *)(&raw_speed));
+        }
+        else if (timerBit == 16)
+        {
+            const uint16_t raw_speed = htim_->Instance->CNT;
+            htim_->Instance->CNT = 0;
+            pos += *((int16_t *)(&raw_speed));
+        }
         return pos;
     }
 
@@ -45,15 +58,26 @@ public:
     /// @note この関数を呼び出すと，内部でエンコーダのカウンタがリセットされる
     int32_t getSpeed(void)
     {
-        const uint32_t raw_speed = htim_->Instance->CNT;
-        htim_->Instance->CNT = 0;
-        pos += *((int32_t *)(&raw_speed));
-        return *((int32_t *)(&raw_speed));
+        if (timerBit == 32)
+        {
+            const uint32_t raw_speed = htim_->Instance->CNT;
+            htim_->Instance->CNT = 0;
+            pos += *((int32_t *)(&raw_speed));
+            return *((int32_t *)(&raw_speed));
+        }
+        else if (timerBit == 16)
+        {
+            const uint16_t raw_speed = htim_->Instance->CNT;
+            htim_->Instance->CNT = 0;
+            pos += *((int16_t *)(&raw_speed));
+            return *((int16_t *)(&raw_speed));
+        }
     }
 
 private:
     TIM_HandleTypeDef *htim_;
     int64_t pos = 0;
+    int timerBit;
 };
 
 #endif // __cplusplus
